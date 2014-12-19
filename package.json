@@ -1,0 +1,21 @@
+{
+  "name": "fxos-mvc",
+  "version": "0.0.1",
+  "description": "A simple MVC pattern using extendable ES6 classes",
+  "main": "mvc.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fxos/mvc.git"
+  },
+  "author": "FxOS Developers <dev-gaia@lists.mozilla.com>",
+  "license": "MPL",
+  "bugs": {
+    "url": "https://github.com/fxos/mvc/issues"
+  },
+  "engines" : {
+    "node" : "0.11.14"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}
