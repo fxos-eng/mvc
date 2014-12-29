@@ -24,6 +24,15 @@ export class View {
 			this[key] = options[key];
 		}
 
+		if (!this.el) {
+			this.el = document.createElement('div');
+		}
+	}
+
+	/**
+	 * Render the default template.
+	 */
+	render() {
 		this.el.innerHTML = this.template();
 	}
 
