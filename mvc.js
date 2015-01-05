@@ -30,6 +30,18 @@ export class View {
 	}
 
 	/**
+	 * Initializes an instance with the specified controller.
+	 *
+	 * @param  {Controller} controller
+	 * @return {View}
+	 */
+	init(controller) {
+		this.controller = controller;
+
+		return this;
+	}
+
+	/**
 	 * Render the default template.
 	 */
 	render() {
@@ -120,6 +132,12 @@ export class Controller {
 
 		for (var key in options) {
 			this[key] = options[key];
+		}
+
+		// Initialize the view (if applicable) when the
+		// controller is instantiated.
+		if (this.view && typeof this.view.init === 'function') {
+			this.view.init(this);
 		}
 	}
 }

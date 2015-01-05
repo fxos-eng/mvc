@@ -30,6 +30,12 @@ define(["exports"], function (exports) {
       }
     };
 
+    View.prototype.init = function (controller) {
+      this.controller = controller;
+
+      return this;
+    };
+
     View.prototype.render = function () {
       this.el.innerHTML = this.template();
     };
@@ -93,6 +99,12 @@ define(["exports"], function (exports) {
 
     for (var key in options) {
       this[key] = options[key];
+    }
+
+    // Initialize the view (if applicable) when the
+    // controller is instantiated.
+    if (this.view && typeof this.view.init === "function") {
+      this.view.init(this);
     }
   };
 
