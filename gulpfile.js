@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var concat = require('gulp-concat');
 var to5 = require('gulp-6to5');
 
 /**
@@ -6,7 +7,11 @@ var to5 = require('gulp-6to5');
  */
 gulp.task('to5', function () {
 	try {
-		return gulp.src('./mvc.js')
+		return gulp.src([
+				'./node_modules/observe-shim/lib/observe-shim.js',
+				'./mvc.js'
+			])
+			.pipe(concat('mvc.js'))
 			.pipe(to5({
 					modules: 'amd'
 				}).on('error', function(e) {
