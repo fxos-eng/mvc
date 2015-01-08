@@ -1,6 +1,6 @@
 {
   "name": "fxos-mvc",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A simple MVC pattern using extendable ES6 classes",
   "main": "mvc.js",
   "scripts": {},
@@ -21,6 +21,8 @@
     "gulp": "3.8.x",
     "gulp-6to5": "^1.0.2",
     "gulp-concat": "^2.4.3",
-    "observe-shim": "^0.4.1"
+    "gulp-merge": "^0.1.0",
+    "observe-shim": "^0.4.1",
+    "observe-utils": "^0.3.2"
   }
 }

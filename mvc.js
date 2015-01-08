@@ -8,6 +8,32 @@ export class Model {
 		for (var key in properties) {
 			this[key] = properties[key];
 		}
+
+		this.observableProperties = {};
+
+		Object.observe(this, (changes) => {
+			changes.forEach((change) => {
+				var handlers = this.observableProperties[change.name];
+				if (handlers) {
+					handlers.forEach((handler) => {
+						handler(change);
+					});
+				}
+			});
+		});
+	}
+
+	on(property, handler) {
+		if (typeof handler !== 'function') {
+			return;
+		}
+
+		if (!this.observableProperties[property]) {
+			ObserveUtils.defineObservableProperties(this, property);
+			this.observableProperties[property] = [];
+		}
+
+		this.observableProperties[property].push(handler);
 	}
 }
 

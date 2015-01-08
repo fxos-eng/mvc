@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var merge = require('gulp-merge');
 var concat = require('gulp-concat');
 var to5 = require('gulp-6to5');
 
@@ -7,17 +8,23 @@ var to5 = require('gulp-6to5');
  */
 gulp.task('to5', function () {
 	try {
-		return gulp.src([
-				'./node_modules/observe-shim/lib/observe-shim.js',
-				'./mvc.js'
-			])
-			.pipe(concat('mvc.js'))
-			.pipe(to5({
-					modules: 'amd'
-				}).on('error', function(e) {
-					console.log('error running 6to5', e);
-				})
+		return merge(
+				gulp
+					.src([
+						'./node_modules/observe-shim/lib/observe-shim.js',
+						'./node_modules/observe-utils/lib/observe-utils.js'
+					])
+					.pipe(concat('shim.js')),
+				gulp
+					.src('./mvc.js')
+					.pipe(to5({
+							modules: 'amd'
+						}).on('error', function(e) {
+							console.log('error running 6to5', e);
+						})
+					)
 			)
+			.pipe(concat('mvc.js'))
 			.pipe(gulp.dest('./dist/'));
 	}  catch(e) {
 		console.log('Got error in 6to5', e);
