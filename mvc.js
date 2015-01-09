@@ -68,10 +68,31 @@ export class View {
 	}
 
 	/**
+	 * Renders the layout wrapper for the template.
+	 *
+	 * @param {Template} Inner template
+	 * @return {String} Rendered layout with template
+	 */
+	layout(template) {
+		return template;
+	}
+
+	/**
 	 * Render the default template.
 	 */
-	render() {
-		this.el.innerHTML = this.template();
+	render(params) {
+		var innerHTML = '';
+
+		if (params) {
+			for (let i = 0; i < params.length; i++) {
+				let param = params[i];
+				innerHTML += this.template(param);
+			}
+		} else {
+			innerHTML = this.template();
+		}
+
+		this.el.innerHTML = this.layout(innerHTML);
 	}
 
 	/**
@@ -164,6 +185,36 @@ export class Controller {
 		// controller is instantiated.
 		if (this.view && typeof this.view.init === 'function') {
 			this.view.init(this);
+		}
+	}
+
+	teardown() {
+
+	}
+
+	main() {
+
+	}
+}
+
+export class RoutingController extends Controller {
+	constructor(controllers) {
+		super();
+		this.controllers = controllers;
+		this.activeController = null;
+		window.addEventListener('hashchange', this.route.bind(this));
+	}
+
+	route() {
+		var route = window.location.hash.slice(1);
+		var controller = this.controllers[route];
+		if (controller) {
+			if (this.activeController) {
+				this.activeController.teardown();
+			}
+
+			this.activeController = controller;
+			controller.main();
 		}
 	}
 }
