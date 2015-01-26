@@ -84,9 +84,16 @@ export class View {
 		var innerHTML = '';
 
 		if (params) {
-			for (let i = 0; i < params.length; i++) {
-				let param = params[i];
-				innerHTML += this.template(param);
+			if (typeof params === 'object') {
+				for (var index in params) {
+					var param = params[index];
+					innerHTML += this.template(param);
+				}
+			} else {
+				for (let i = 0; i < params.length; i++) {
+					var param = params[i];
+					innerHTML += this.template(param);
+				}
 			}
 		} else {
 			innerHTML = this.template();
@@ -152,7 +159,7 @@ export class View {
 		events[type] = events[type].filter((delegate) => {
 			if (typeof handler === 'function') {
 				return delegate.selector !== selector ||
-							 delegate.handler  !== handler;
+					delegate.handler  !== handler;
 			}
 
 			return delegate.selector !== selector;
@@ -216,5 +223,60 @@ export class RoutingController extends Controller {
 			this.activeController = controller;
 			controller.main();
 		}
+	}
+}
+
+/**
+ * Service
+ */
+export class Service {
+	constructor() {
+		this._listeners = {};
+		this._dispatchedEvents = {};
+	}
+
+	addEventListener(name, callback, trigger) {
+		if (!this._listeners[name]) {
+			this._listeners[name] = [callback];
+		} else {
+			this._listeners[name].push(callback);
+		}
+
+		if (trigger && this._dispatchedEvents[name] !== undefined) {
+			setTimeout(() => {
+				callback(this._dispatchedEvents[name]);
+			});
+		}
+	}
+
+	removeEventListener(name, callback) {
+		if (!this._listeners[name]) {
+			return;
+		}
+
+		var listenerIndex;
+		this._listeners[name].find((listener, index) => {
+			if (listener === callback) {
+				listenerIndex = index;
+			}
+
+			return listenerIndex !== undefined;
+		});
+
+		if (listenerIndex !== undefined) {
+			this._listeners[name].splice(listenerIndex, 1);
+		}
+	}
+
+	_dispatchEvent(name, params) {
+		if (!this._listeners[name]) {
+			return;
+		}
+
+		this._dispatchedEvents[name] = params || null;
+
+		this._listeners[name].forEach((listener) => {
+			listener(params);
+		});
 	}
 }
