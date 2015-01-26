@@ -1364,9 +1364,16 @@ define(["exports"], function (exports) {
       var innerHTML = "";
 
       if (params) {
-        for (var i = 0; i < params.length; i++) {
-          var param = params[i];
-          innerHTML += this.template(param);
+        if (typeof params === "object") {
+          for (var index in params) {
+            var param = params[index];
+            innerHTML += this.template(param);
+          }
+        } else {
+          for (var i = 0; i < params.length; i++) {
+            var param = params[i];
+            innerHTML += this.template(param);
+          }
         }
       } else {
         innerHTML = this.template();
@@ -1479,4 +1486,60 @@ define(["exports"], function (exports) {
   })(Controller);
 
   exports.RoutingController = RoutingController;
+  var Service = (function () {
+    var Service = function Service() {
+      this._listeners = {};
+      this._dispatchedEvents = {};
+    };
+
+    Service.prototype.addEventListener = function (name, callback, trigger) {
+      var _this2 = this;
+      if (!this._listeners[name]) {
+        this._listeners[name] = [callback];
+      } else {
+        this._listeners[name].push(callback);
+      }
+
+      if (trigger && this._dispatchedEvents[name] !== undefined) {
+        setTimeout(function () {
+          callback(_this2._dispatchedEvents[name]);
+        });
+      }
+    };
+
+    Service.prototype.removeEventListener = function (name, callback) {
+      if (!this._listeners[name]) {
+        return;
+      }
+
+      var listenerIndex;
+      this._listeners[name].find(function (listener, index) {
+        if (listener === callback) {
+          listenerIndex = index;
+        }
+
+        return listenerIndex !== undefined;
+      });
+
+      if (listenerIndex !== undefined) {
+        this._listeners[name].splice(listenerIndex, 1);
+      }
+    };
+
+    Service.prototype._dispatchEvent = function (name, params) {
+      if (!this._listeners[name]) {
+        return;
+      }
+
+      this._dispatchedEvents[name] = params || null;
+
+      this._listeners[name].forEach(function (listener) {
+        listener(params);
+      });
+    };
+
+    return Service;
+  })();
+
+  exports.Service = Service;
 });
