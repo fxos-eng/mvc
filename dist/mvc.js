@@ -1461,9 +1461,15 @@ define(["exports"], function (exports) {
   exports.Controller = Controller;
   var RoutingController = (function (Controller) {
     var RoutingController = function RoutingController(controllers) {
+      if (window.routingController) {
+        console.error("Document can only contain one RoutingController");
+        return;
+      }
+
       Controller.call(this);
-      this.controllers = controllers;
+      this._controllers = controllers;
       this.activeController = null;
+      window.routingController = this;
       window.addEventListener("hashchange", this.route.bind(this));
     };
 
@@ -1471,7 +1477,7 @@ define(["exports"], function (exports) {
 
     RoutingController.prototype.route = function () {
       var route = window.location.hash.slice(1);
-      var controller = this.controllers[route];
+      var controller = this._controllers[route];
       if (controller) {
         if (this.activeController) {
           this.activeController.teardown();
@@ -1480,6 +1486,10 @@ define(["exports"], function (exports) {
         this.activeController = controller;
         controller.main();
       }
+    };
+
+    RoutingController.prototype.controller = function (id) {
+      return this._controllers[id];
     };
 
     return RoutingController;
