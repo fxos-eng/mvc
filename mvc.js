@@ -206,15 +206,21 @@ export class Controller {
 
 export class RoutingController extends Controller {
   constructor(controllers) {
+    if (window.routingController) {
+      console.error('Document can only contain one RoutingController');
+      return;
+    }
+
     super();
-    this.controllers = controllers;
+    this._controllers = controllers;
     this.activeController = null;
+    window.routingController = this;
     window.addEventListener('hashchange', this.route.bind(this));
   }
 
   route() {
     var route = window.location.hash.slice(1);
-    var controller = this.controllers[route];
+    var controller = this._controllers[route];
     if (controller) {
       if (this.activeController) {
         this.activeController.teardown();
@@ -223,6 +229,10 @@ export class RoutingController extends Controller {
       this.activeController = controller;
       controller.main();
     }
+  }
+
+  controller(id) {
+    return this._controllers[id];
   }
 }
 
