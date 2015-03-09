@@ -143,7 +143,8 @@ export class View {
 
     events[type].push({
       selector: selector,
-      handler: handler
+      handler: handler,
+      controller: this.controller
     });
   }
 
@@ -167,12 +168,27 @@ export class View {
   }
 }
 
+/**
+ * Forward an event based on the target's `[data-action]` attr to the controller.
+ * e.g. "click" on a `<button data-action="cancel">` goes to controller.cancel()
+ */
+function handleAction(event, controller) {
+  var action = event.target.dataset.action;
+  if (controller && controller[action]) {
+    controller[action](event);
+  }
+}
+
 function delegateHandler(event) {
   var target = event.target;
 
   events[event.type].forEach((delegate) => {
     if (target.matches(delegate.selector)) {
-      delegate.handler.call(target, event);
+      if (delegate.handler) {
+        delegate.handler.call(target, event);
+      } else {
+        handleAction(event, delegate.controller);
+      }
     }
   });
 }
