@@ -135,7 +135,10 @@ export class View {
    *
    *
    */
-  on(type, selector, handler) {
+  on(type, selector, handler, scope) {
+    var controller = this.controller;
+    scope = scope || this.el;
+
     if (!events[type]) {
       events[type] = [];
       window.addEventListener(type, delegateHandler, true);
@@ -144,7 +147,8 @@ export class View {
     events[type].push({
       selector: selector,
       handler: handler,
-      controller: this.controller
+      controller: controller,
+      scope: scope
     });
   }
 
@@ -183,7 +187,7 @@ function delegateHandler(event) {
   var target = event.target;
 
   events[event.type].forEach((delegate) => {
-    if (target.matches(delegate.selector)) {
+    if (delegate.scope.contains(target) && target.matches(delegate.selector)) {
       if (delegate.handler) {
         delegate.handler.call(target, event);
       } else {

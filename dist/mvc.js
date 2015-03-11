@@ -1394,7 +1394,10 @@ define(["exports"], function (exports) {
       return this.el.querySelectorAll(selector);
     };
 
-    View.prototype.on = function (type, selector, handler) {
+    View.prototype.on = function (type, selector, handler, scope) {
+      var controller = this.controller;
+      scope = scope || this.el;
+
       if (!events[type]) {
         events[type] = [];
         window.addEventListener(type, delegateHandler, true);
@@ -1403,7 +1406,8 @@ define(["exports"], function (exports) {
       events[type].push({
         selector: selector,
         handler: handler,
-        controller: this.controller
+        controller: controller,
+        scope: scope
       });
     };
 
@@ -1442,7 +1446,7 @@ define(["exports"], function (exports) {
     var target = event.target;
 
     events[event.type].forEach(function (delegate) {
-      if (target.matches(delegate.selector)) {
+      if (delegate.scope.contains(target) && target.matches(delegate.selector)) {
         if (delegate.handler) {
           delegate.handler.call(target, event);
         } else {
