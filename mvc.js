@@ -299,11 +299,11 @@ export class Service {
   }
 
   _dispatchEvent(name, params) {
+    this._dispatchedEvents[name] = params || null;
+
     if (!this._listeners[name]) {
       return;
     }
-
-    this._dispatchedEvents[name] = params || null;
 
     this._listeners[name].forEach((listener) => {
       listener(params);

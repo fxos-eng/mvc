@@ -1557,11 +1557,11 @@ define(["exports"], function (exports) {
     };
 
     Service.prototype._dispatchEvent = function (name, params) {
+      this._dispatchedEvents[name] = params || null;
+
       if (!this._listeners[name]) {
         return;
       }
-
-      this._dispatchedEvents[name] = params || null;
 
       this._listeners[name].forEach(function (listener) {
         listener(params);
