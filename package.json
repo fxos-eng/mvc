@@ -1,6 +1,6 @@
 {
   "name": "fxos-mvc",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "A simple MVC pattern using extendable ES6 classes",
   "main": "mvc.js",
   "scripts": {},
@@ -23,6 +23,7 @@
     "gulp-concat": "^2.4.3",
     "gulp-merge": "^0.1.0",
     "observe-shim": "^0.4.1",
-    "observe-utils": "^0.3.2"
+    "observe-utils": "^0.3.2",
+    "sanitizer": "git+https://github.com/fxos-eng/sanitizer.git#v0.1.0"
   }
 }
