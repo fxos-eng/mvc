@@ -1582,14 +1582,19 @@ define(["exports"], function (exports) {
 
     RoutingController.prototype.route = function () {
       var route = window.location.hash.slice(1);
-      var controller = this._controllers[route];
-      if (controller) {
-        if (this.activeController) {
-          this.activeController.teardown();
-        }
+      for (var routeName in this._controllers) {
+        var regexp = new RegExp("^" + routeName + "$");
+        var match = route.match(regexp);
+        var controller = this._controllers[routeName];
+        if (match && controller) {
+          if (this.activeController) {
+            this.activeController.teardown();
+          }
 
-        this.activeController = controller;
-        controller.main();
+          this.activeController = controller;
+          controller.main.apply(controller, match.slice(1));
+          break;
+        }
       }
     };
 
