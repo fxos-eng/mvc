@@ -1464,7 +1464,7 @@ define(["exports"], function (exports) {
         innerHTML = this.template();
       }
 
-      this.el.innerHTML = this.layout(innerHTML);
+      this.el.innerHTML = Sanitizer.escapeHTML(this.layout(innerHTML));
     };
 
     View.prototype.template = function () {
