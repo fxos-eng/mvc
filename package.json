@@ -1,30 +1,30 @@
 {
   "name": "fxos-mvc",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "A simple MVC pattern using extendable ES6 classes",
   "main": "mvc.js",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git://github.com/fxos/mvc.git"
+    "url": "git://github.com/fxos-eng/mvc.git"
   },
   "author": "FxOS Developers <dev-gaia@lists.mozilla.com>",
   "license": "MPL",
   "bugs": {
-    "url": "https://github.com/fxos/mvc/issues"
+    "url": "https://github.com/fxos-eng/mvc/issues"
   },
   "engines": {
     "node": "0.11.14"
   },
   "devDependencies": {},
   "dependencies": {
-    "gulp": "3.8.x",
+    "fxos-sanitizer": "git+https://github.com/fxos-eng/sanitizer.git#master",
+    "gulp": "^3.9.1",
     "gulp-6to5": "^1.0.2",
-    "gulp-concat": "^2.4.3",
-    "gulp-merge": "^0.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-merge": "^0.1.1",
     "gulp-wrapper": "^1.0.0",
     "observe-shim": "^0.4.1",
-    "observe-utils": "^0.3.2",
-    "sanitizer": "git+https://github.com/fxos-eng/sanitizer.git#v0.1.0"
+    "observe-utils": "^0.3.2"
   }
 }
